@@ -1,4 +1,5 @@
 import { useState, type FormEvent, type FocusEvent } from 'react'
+import './SignUpForm.css'
 
 function validateEmail(email: string): string | undefined {
   if (!email) return 'Email is required'
@@ -43,16 +44,32 @@ export default function SignUpForm({ onSubmit }: SignUpFormProps) {
   }
 
   if (submitted) {
-    return <p role="status">Sign up successful!</p>
+    return (
+      <p role="status" className="signup-success">
+        Sign up successful!
+      </p>
+    )
   }
 
   return (
-    <form onSubmit={handleSubmit} noValidate aria-label="Sign up form">
-      <div>
-        <label htmlFor="email">Email</label>
+    <form
+      onSubmit={handleSubmit}
+      noValidate
+      aria-label="Sign up form"
+      className="signup-card"
+    >
+      <h1 className="signup-card__title">Create your account</h1>
+      <p className="signup-card__subtitle">Sign up to get started</p>
+
+      <div className="signup-field">
+        <label htmlFor="email" className="signup-field__label">
+          Email
+        </label>
         <input
           id="email"
           type="email"
+          autoComplete="email"
+          placeholder="you@example.com"
           value={email}
           onChange={(e) => {
             setEmail(e.target.value)
@@ -61,19 +78,28 @@ export default function SignUpForm({ onSubmit }: SignUpFormProps) {
           }}
           onBlur={handleEmailBlur}
           aria-describedby={emailError ? 'email-error' : undefined}
+          aria-invalid={emailError ? true : undefined}
+          className={
+            'signup-field__input' +
+            (emailError ? ' signup-field__input--invalid' : '')
+          }
         />
         {emailError && (
-          <span id="email-error" role="alert">
+          <span id="email-error" role="alert" className="signup-field__error">
             {emailError}
           </span>
         )}
       </div>
 
-      <div>
-        <label htmlFor="password">Password</label>
+      <div className="signup-field">
+        <label htmlFor="password" className="signup-field__label">
+          Password
+        </label>
         <input
           id="password"
           type="password"
+          autoComplete="new-password"
+          placeholder="At least 8 characters with a number"
           value={password}
           onChange={(e) => {
             setPassword(e.target.value)
@@ -81,15 +107,20 @@ export default function SignUpForm({ onSubmit }: SignUpFormProps) {
           }}
           onBlur={handlePasswordBlur}
           aria-describedby={passwordError ? 'password-error' : undefined}
+          aria-invalid={passwordError ? true : undefined}
+          className={
+            'signup-field__input' +
+            (passwordError ? ' signup-field__input--invalid' : '')
+          }
         />
         {passwordError && (
-          <span id="password-error" role="alert">
+          <span id="password-error" role="alert" className="signup-field__error">
             {passwordError}
           </span>
         )}
       </div>
 
-      <button type="submit" disabled={!isValid}>
+      <button type="submit" disabled={!isValid} className="signup-card__submit">
         Sign Up
       </button>
     </form>
